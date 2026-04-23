@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: quizpdf-ai-backend
+    runtime: node
+    rootDir: backend
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /health
+    envVars:
+      - key: GROQ_API_KEY
+        sync: false
+      - key: GROQ_CHAT_MODEL
+        value: llama-3.3-70b-versatile
+      - key: GROQ_QUIZ_MODEL
+        value: llama-3.3-70b-versatile
+      - key: GROQ_BASE_URL
+        value: https://api.groq.com/openai/v1
+      - key: ALLOWED_ORIGINS
+        value: "*"
+      - key: PDF_CONTEXT_MAX_CHARS
+        value: "6000"
