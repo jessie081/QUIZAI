@@ -9,7 +9,7 @@ class QuizPdfApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'QuizPDF AI',
+      title: 'Quizly',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
       locale: const Locale('en', 'US'),
