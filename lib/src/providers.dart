@@ -134,6 +134,13 @@ String _buildQuizErrorMessage(Object error) {
         message.contains('resource exhausted')) {
       return 'Quiz generation is temporarily busy right now. Please wait a moment and try again.';
     }
+    if (message.contains('invalid json') ||
+        message.contains('wrong number') ||
+        message.contains('wrong total question count') ||
+        message.contains('wrong length') ||
+        message.contains('must include exactly 4 options')) {
+      return 'The AI returned an invalid quiz format. Please try again or reduce the question count.';
+    }
     if (message.contains('api key') ||
         message.contains('invalid api key') ||
         message.contains('authentication failed')) {
