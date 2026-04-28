@@ -80,9 +80,14 @@ class AiAssistantCard extends StatelessWidget {
             children: prompts
                 .map(
                   (prompt) => ActionChip(
-                      label: Text(prompt.label),
-                      onPressed: enabled ? () => onPromptTap(prompt) : null,
+                    label: Text(
+                      prompt.label,
+                      softWrap: true,
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
                     ),
+                    onPressed: enabled ? () => onPromptTap(prompt) : null,
+                  ),
                 )
                 .toList(),
           ),

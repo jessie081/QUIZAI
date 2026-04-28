@@ -85,6 +85,7 @@ class QuizResultScreen extends ConsumerWidget {
                     width: double.infinity,
                     child: OutlinedButton(
                       onPressed: () {
+                        resetQuizTakingProgress(ref, quiz);
                         Navigator.pushReplacementNamed(
                           context,
                           AppRoutes.takeQuiz,

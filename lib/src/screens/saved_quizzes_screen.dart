@@ -110,6 +110,7 @@ class _SavedQuizCard extends ConsumerWidget {
               Expanded(
                 child: ElevatedButton(
                   onPressed: () {
+                    resetQuizTakingProgress(ref, quiz);
                     Navigator.pushNamed(
                       context,
                       AppRoutes.takeQuiz,

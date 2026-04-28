@@ -55,7 +55,8 @@ class RemoteQuizGenerationService implements QuizGenerationService {
       prompt: json['question'] as String? ?? 'Untitled question',
       answer: json['answer'] as String? ?? '',
       choices: List<String>.from(json['options'] as List? ?? const <String>[]),
-      explanation: json['explanation'] as String?,
+      // Ignore model explanations: prompts require stems/answers only; avoids clutter.
+      explanation: null,
     );
   }
 

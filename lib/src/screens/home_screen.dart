@@ -111,11 +111,16 @@ class _HomeTopBar extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('QuizPDF AI', style: theme.textTheme.headlineMedium),
+              Text(
+                'QuizPDF AI',
+                style: theme.textTheme.headlineMedium,
+                softWrap: true,
+              ),
               const SizedBox(height: 6),
               Text(
                 'Chat with AI or continue your PDF study flow.',
                 style: theme.textTheme.bodyLarge,
+                softWrap: true,
               ),
             ],
           ),

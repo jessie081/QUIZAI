@@ -76,11 +76,17 @@ class _GeneratedQuizScreenState extends ConsumerState<GeneratedQuizScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(quiz.title, style: theme.textTheme.titleLarge),
+                  Text(
+                    quiz.title,
+                    style: theme.textTheme.titleLarge,
+                    softWrap: true,
+                  ),
                   const SizedBox(height: 8),
                   Text(
-                    quiz.summary ?? 'Your quiz is ready. Start immediately or save it for later.',
+                    quiz.summary ??
+                        'Your quiz is ready. Start immediately or save it for later.',
                     style: theme.textTheme.bodyMedium,
+                    softWrap: true,
                   ),
                   const SizedBox(height: 14),
                   Wrap(
@@ -89,7 +95,14 @@ class _GeneratedQuizScreenState extends ConsumerState<GeneratedQuizScreen> {
                     children: [
                       Chip(label: Text('${quiz.totalQuestions} questions')),
                       Chip(label: Text(quiz.difficulty)),
-                      Chip(label: Text(quiz.sourcePdfName)),
+                      Chip(
+                        label: Text(
+                          quiz.sourcePdfName,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          softWrap: false,
+                        ),
+                      ),
                     ],
                   ),
                   const SizedBox(height: 18),
@@ -97,6 +110,7 @@ class _GeneratedQuizScreenState extends ConsumerState<GeneratedQuizScreen> {
                     width: double.infinity,
                     child: ElevatedButton.icon(
                       onPressed: () {
+                        resetQuizTakingProgress(ref, quiz);
                         Navigator.pushNamed(
                           context,
                           AppRoutes.takeQuiz,
@@ -224,7 +238,11 @@ class _QuestionPreviewCard extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 8),
-          Text(question.prompt, style: theme.textTheme.titleMedium),
+          Text(
+            question.prompt,
+            style: theme.textTheme.titleMedium,
+            softWrap: true,
+          ),
           const SizedBox(height: 12),
           Chip(label: Text(question.typeLabel)),
         ],

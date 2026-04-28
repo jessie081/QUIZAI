@@ -219,11 +219,17 @@ class _PdfWorkspaceCard extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 12),
-              TextButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, AppRoutes.uploadPdf);
-                },
-                child: const Text('Replace PDF'),
+              Flexible(
+                child: TextButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, AppRoutes.uploadPdf);
+                  },
+                  child: const Text(
+                    'Replace PDF',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
               ),
             ],
           ),

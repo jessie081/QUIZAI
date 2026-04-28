@@ -12,6 +12,7 @@ class QuizPdfApp extends StatelessWidget {
       title: 'QuizPDF AI',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
+      locale: const Locale('en', 'US'),
       initialRoute: AppRoutes.splash,
       onGenerateRoute: AppRouter.generateRoute,
     );

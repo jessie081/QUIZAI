@@ -35,7 +35,12 @@ class AppShellAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      title: Text(title),
+      title: Text(
+        title,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+        softWrap: false,
+      ),
       automaticallyImplyLeading: automaticallyImplyLeading,
       actions: <Widget>[
         ...actions,

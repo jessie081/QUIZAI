@@ -8,6 +8,13 @@ import '../providers.dart';
 import '../widgets/app_shell_app_bar.dart';
 import '../widgets/app_status_banner.dart';
 
+int _answeredQuestionCount(QuizTakingState state, QuizModel quiz) {
+  return quiz.questions.where((q) {
+    final raw = state.answers[q.id]?.trim() ?? '';
+    return raw.isNotEmpty;
+  }).length;
+}
+
 class TakeQuizScreen extends ConsumerWidget {
   const TakeQuizScreen({
     super.key,
@@ -21,6 +28,8 @@ class TakeQuizScreen extends ConsumerWidget {
     final state = ref.watch(quizTakingProvider(quiz));
     final notifier = ref.read(quizTakingProvider(quiz).notifier);
     final theme = Theme.of(context);
+    final answered = _answeredQuestionCount(state, quiz);
+    final total = quiz.totalQuestions;
 
     return Scaffold(
       appBar: const AppShellAppBar(title: 'Take Quiz'),
@@ -38,12 +47,12 @@ class TakeQuizScreen extends ConsumerWidget {
             width: double.infinity,
             child: ElevatedButton(
               onPressed: () {
-                final unansweredCount = quiz.totalQuestions - state.answers.length;
-                if (unansweredCount > 0) {
+                if (answered < total) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: Text(
-                        'You still have $unansweredCount unanswered ${unansweredCount == 1 ? "question" : "questions"}.',
+                        'You still have ${total - answered} unanswered '
+                        '${total - answered == 1 ? "question" : "questions"}.',
                       ),
                     ),
                   );
@@ -79,21 +88,26 @@ class TakeQuizScreen extends ConsumerWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(quiz.title, style: theme.textTheme.titleLarge),
+                  Text(
+                    quiz.title,
+                    style: theme.textTheme.titleLarge,
+                    softWrap: true,
+                  ),
                   const SizedBox(height: 8),
                   Text(
                     'Finish every item, then submit once. The score screen will guide you to the next best action.',
                     style: theme.textTheme.bodyMedium,
+                    softWrap: true,
                   ),
                   const SizedBox(height: 14),
                   Text(
-                    '${state.answers.length} of ${quiz.totalQuestions} answered',
+                    '$answered of $total answered',
                     style: theme.textTheme.titleMedium,
                   ),
                 ],
               ),
             ),
-            if (state.answers.length < quiz.totalQuestions) ...[
+            if (answered < total) ...[
               const SizedBox(height: 16),
               const AppStatusBanner(
                 icon: Icons.info_outline_rounded,
@@ -113,7 +127,8 @@ class TakeQuizScreen extends ConsumerWidget {
                       index: entry.key + 1,
                       question: entry.value,
                       value: state.answers[entry.value.id],
-                      onChanged: (value) => notifier.setAnswer(entry.value.id, value),
+                      onChanged: (value) =>
+                          notifier.setAnswer(entry.value.id, value),
                     ),
                   ),
                 ),
@@ -172,15 +187,23 @@ class _QuestionInputCard extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 8),
-          Text(question.prompt, style: theme.textTheme.bodyLarge),
+          Text(
+            question.prompt,
+            style: theme.textTheme.bodyLarge,
+            softWrap: true,
+          ),
           const SizedBox(height: 14),
           if (question.expectsOptions && answerOptions.isNotEmpty)
             ...answerOptions.map(
               (choice) => RadioListTile<String>(
                 contentPadding: EdgeInsets.zero,
+                visualDensity: VisualDensity.compact,
                 value: choice,
                 groupValue: value,
-                title: Text(choice),
+                title: Text(
+                  choice,
+                  softWrap: true,
+                ),
                 onChanged: (selected) {
                   if (selected != null) {
                     onChanged(selected);
@@ -190,6 +213,7 @@ class _QuestionInputCard extends StatelessWidget {
             )
           else if (question.expectsOptions)
             Container(
+              width: double.infinity,
               padding: const EdgeInsets.all(14),
               decoration: BoxDecoration(
                 color: const Color(0xFFFDF2F2),
@@ -202,24 +226,90 @@ class _QuestionInputCard extends StatelessWidget {
                   color: const Color(0xFFB42318),
                   fontWeight: FontWeight.w600,
                 ),
+                softWrap: true,
               ),
             )
           else
-            TextFormField(
-              initialValue: value,
-              minLines: 1,
-              maxLines: question.type == QuestionType.shortAnswer ? 4 : 1,
-              decoration: InputDecoration(
-                labelText:
-                    question.type == QuestionType.shortAnswer ? 'Your answer' : 'Answer',
-                hintText: question.type == QuestionType.shortAnswer
-                    ? 'Type your answer'
-                    : 'Enter your answer',
-              ),
+            _SyncedAnswerTextField(
+              questionId: question.id,
+              value: value,
+              questionType: question.type,
               onChanged: onChanged,
             ),
         ],
       ),
+    );
+  }
+}
+
+/// Keeps [TextEditingController] in sync with Riverpod state so answers are not
+/// lost or stuck when the parent rebuilds.
+class _SyncedAnswerTextField extends StatefulWidget {
+  const _SyncedAnswerTextField({
+    required this.questionId,
+    required this.value,
+    required this.questionType,
+    required this.onChanged,
+  });
+
+  final String questionId;
+  final String? value;
+  final QuestionType questionType;
+  final ValueChanged<String> onChanged;
+
+  @override
+  State<_SyncedAnswerTextField> createState() => _SyncedAnswerTextFieldState();
+}
+
+class _SyncedAnswerTextFieldState extends State<_SyncedAnswerTextField> {
+  late final TextEditingController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = TextEditingController(text: widget.value ?? '');
+  }
+
+  @override
+  void didUpdateWidget(covariant _SyncedAnswerTextField oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    final next = widget.value ?? '';
+    final prev = oldWidget.value ?? '';
+    if (next != prev && next != _controller.text) {
+      _controller.value = TextEditingValue(
+        text: next,
+        selection: TextSelection.collapsed(offset: next.length),
+      );
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+      key: ValueKey<String>(widget.questionId),
+      controller: _controller,
+      minLines: 1,
+      maxLines: widget.questionType == QuestionType.shortAnswer ? 4 : 1,
+      keyboardType: widget.questionType == QuestionType.shortAnswer
+          ? TextInputType.multiline
+          : TextInputType.text,
+      textCapitalization: TextCapitalization.sentences,
+      decoration: InputDecoration(
+        labelText: widget.questionType == QuestionType.shortAnswer
+            ? 'Your answer'
+            : 'Answer',
+        hintText: widget.questionType == QuestionType.shortAnswer
+            ? 'Type your answer'
+            : 'Enter your answer',
+        alignLabelWithHint: widget.questionType == QuestionType.shortAnswer,
+      ),
+      onChanged: widget.onChanged,
     );
   }
 }

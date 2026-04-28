@@ -612,7 +612,14 @@ final quizGenerationProvider = StateNotifierProvider.family<
   },
 );
 
-final quizTakingProvider = StateNotifierProvider.autoDispose.family<
+/// Not autoDispose: avoids losing in-progress answers when the route or subtree
+/// briefly disposes listeners. Call [resetQuizTakingProgress] before a new attempt
+/// on the same [QuizModel] instance (start / retake / reopen).
+final quizTakingProvider = StateNotifierProvider.family<
     QuizTakingNotifier, QuizTakingState, QuizModel>(
   (_, quiz) => QuizTakingNotifier(quiz),
 );
+
+void resetQuizTakingProgress(WidgetRef ref, QuizModel quiz) {
+  ref.read(quizTakingProvider(quiz).notifier).reset();
+}

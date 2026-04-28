@@ -134,17 +134,20 @@ class _QuizSettingsScreenState extends ConsumerState<QuizSettingsScreen> {
                   const SizedBox(height: 16),
                   Text('Difficulty', style: theme.textTheme.titleMedium),
                   const SizedBox(height: 8),
-                  SegmentedButton<String>(
-                    segments: const [
-                      ButtonSegment(value: 'easy', label: Text('Easy')),
-                      ButtonSegment(value: 'medium', label: Text('Medium')),
-                      ButtonSegment(value: 'hard', label: Text('Hard')),
-                    ],
-                    selected: <String>{settings.difficulty},
-                    onSelectionChanged: (selection) {
-                      ref.read(quizSettingsProvider.notifier).state =
-                          settings.copyWith(difficulty: selection.first);
-                    },
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: SegmentedButton<String>(
+                      segments: const [
+                        ButtonSegment(value: 'easy', label: Text('Easy')),
+                        ButtonSegment(value: 'medium', label: Text('Medium')),
+                        ButtonSegment(value: 'hard', label: Text('Hard')),
+                      ],
+                      selected: <String>{settings.difficulty},
+                      onSelectionChanged: (selection) {
+                        ref.read(quizSettingsProvider.notifier).state =
+                            settings.copyWith(difficulty: selection.first);
+                      },
+                    ),
                   ),
                   const SizedBox(height: 20),
                   QuestionCountInputRow(

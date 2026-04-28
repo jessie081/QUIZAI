@@ -99,7 +99,11 @@ class _ReviewCard extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 8),
-          Text(question.prompt, style: theme.textTheme.bodyLarge),
+          Text(
+            question.prompt,
+            style: theme.textTheme.bodyLarge,
+            softWrap: true,
+          ),
           const SizedBox(height: 12),
           if (submittedAnswer != null) ...[
             Text(
@@ -116,6 +120,7 @@ class _ReviewCard extends StatelessWidget {
                     ? const Color(0xFF157F3D)
                     : const Color(0xFFB42318),
               ),
+              softWrap: true,
             ),
             const SizedBox(height: 10),
           ],
@@ -126,7 +131,11 @@ class _ReviewCard extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 4),
-          Text(question.answer, style: theme.textTheme.bodyMedium),
+          Text(
+            question.answer,
+            style: theme.textTheme.bodyMedium,
+            softWrap: true,
+          ),
           if (question.explanation != null) ...[
             const SizedBox(height: 10),
             Text(
