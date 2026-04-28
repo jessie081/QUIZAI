@@ -28,7 +28,7 @@ class SettingsScreen extends ConsumerWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('QuizPDF AI', style: theme.textTheme.titleLarge),
+                  Text('Quizly', style: theme.textTheme.titleLarge),
                   const SizedBox(height: 8),
                   Text(
                     'Chat is the primary experience. PDF study tools and quiz generation stay available as separate workflows.',

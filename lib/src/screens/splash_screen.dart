@@ -54,7 +54,7 @@ class _SplashScreenState extends State<SplashScreen> {
               ),
             ),
             const SizedBox(height: 20),
-            Text('QuizPDF AI', style: theme.textTheme.headlineMedium),
+            Text('Quizly', style: theme.textTheme.headlineMedium),
             const SizedBox(height: 10),
             Text(
               'Study PDFs, generate quizzes, and learn with AI.',

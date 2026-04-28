@@ -112,7 +112,7 @@ class _HomeTopBar extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'QuizPDF AI',
+                'Quizly',
                 style: theme.textTheme.headlineMedium,
                 softWrap: true,
               ),
