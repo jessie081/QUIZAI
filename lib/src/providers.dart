@@ -134,8 +134,13 @@ String _buildQuizErrorMessage(Object error) {
         message.contains('resource exhausted')) {
       return 'Quiz generation is temporarily busy right now. Please wait a moment and try again.';
     }
-    if (message.contains('api key') || message.contains('groq')) {
+    if (message.contains('api key') ||
+        message.contains('invalid api key') ||
+        message.contains('authentication failed')) {
       return 'Quiz generation is not ready yet. Check the Groq backend.';
+    }
+    if (error.statusCode != null && error.statusCode! >= 500) {
+      return 'The quiz service is temporarily unavailable. Please try again shortly.';
     }
     if (error.statusCode == 400) {
       return 'Your quiz settings could not be processed. Please adjust them and try again.';
