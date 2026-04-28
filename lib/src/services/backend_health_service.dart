@@ -82,7 +82,7 @@ class BackendHealthService {
           details: details,
         ),
       );
-    } on BackendApiException catch (error) {
+    } on BackendApiException {
       return BackendHealthStatus(
         isConfigured: true,
         isReachable: false,

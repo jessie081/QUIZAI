@@ -433,7 +433,7 @@ class _QuestionEditorCard extends StatelessWidget {
           ),
           const SizedBox(height: 12),
           DropdownButtonFormField<QuestionType>(
-            value: draft.type,
+            initialValue: draft.type,
             decoration: const InputDecoration(
               labelText: 'Question type',
             ),
@@ -475,7 +475,7 @@ class _QuestionEditorCard extends StatelessWidget {
               const SizedBox(height: 10),
             ],
             DropdownButtonFormField<int>(
-              value: draft.correctChoiceIndex ?? 0,
+              initialValue: draft.correctChoiceIndex ?? 0,
               decoration: const InputDecoration(
                 labelText: 'Correct option',
               ),
