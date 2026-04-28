@@ -12,7 +12,10 @@ Requirements:
 - If hybrid is selected, distribute types as evenly as possible
 - Questions must be clear, relevant, and grounded in the PDF
 - Do not invent information outside the PDF
-- Multiple choice must have exactly 4 options and 1 correct answer
-- Return only strict JSON with quiz_title and questions
+- No references, links, DOIs, citations, or sources in stems, options, or answers
+- No explanations or rationales inside the JSON; return only the required fields
+- No duplicate question stems; multiple choice: exactly 4 options, answer matches one option verbatim
+- true_false: answer exactly "True" or "False"; omit options (app supplies True/False)
+- Return only strict JSON: quiz_title, difficulty, question_counts, total_questions, questions
 ''';
 }

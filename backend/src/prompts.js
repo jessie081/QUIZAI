@@ -103,8 +103,14 @@ export function buildQuizSystemInstruction() {
     'Return only valid json that matches the required schema.',
     'Use only the supplied PDF context.',
     'Respect the exact requested counts per question type.',
-    'Do not add commentary, markdown, or explanations outside the JSON.',
+    'Do not add commentary, markdown, or prose outside the JSON.',
     'The json object must include quiz_title, difficulty, question_counts, total_questions, and questions.',
+    'In every question: no references, links, DOIs, citations, or sources in stems, options, or answers.',
+    'Do not include explanations, rationales, or teaching notes inside the JSON.',
+    'Questions must be clear and concise; do not repeat the same question stem.',
+    'multiple_choice: exactly 4 options; answer must match one option exactly (same spelling and casing).',
+    'true_false: answer must be exactly "True" or "False"; omit the options field (or use an empty array).',
+    'identification and short_answer: omit options (or use an empty array); answer is the expected response text.',
   ].join('\n');
 }
 
@@ -135,6 +141,7 @@ export function buildQuizUserPrompt({
     formattedChunks,
     'Return strict json only.',
     'Use this exact top-level structure: {"quiz_title":"","difficulty":"","question_counts":{},"total_questions":0,"questions":[]}.',
+    'Each questions[] item: {"type":"multiple_choice|true_false|identification|short_answer","question":"...","options":[...] or omitted,"answer":"..."}; answer must exactly match one option for multiple_choice.',
   ].filter(Boolean).join('\n\n');
 }
 
