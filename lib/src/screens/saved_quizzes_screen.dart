@@ -15,7 +15,6 @@ class SavedQuizzesScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final savedQuizzes = ref.watch(savedQuizzesProvider);
-    final theme = Theme.of(context);
 
     return Scaffold(
       appBar: const AppShellAppBar(
